@@ -1,3 +1,20 @@
+-- What are the top 10 customers by lifetime revenue?
+select company_name,
+       total_revenue,
+       rank() over (order by sub.total_revenue desc) as rank
+from (
+    select o.customer_id,
+    round(SUM((od.unit_price * (1 - od.discount))::numeric * od.quantity), 2) as total_revenue
+    from orders o
+    join order_details od on o.order_id = od.order_id
+    group by customer_id
+     ) sub
+join customers c on c.customer_id = sub.customer_id
+order by rank
+limit 10
+
+
+
 -- Which products are the most profitable (revenue − cost)?
 with ProductProfitability AS (
     select
