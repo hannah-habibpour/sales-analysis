@@ -53,3 +53,13 @@ join products p on p.product_id=od.product_id
 group by p.product_id, p.product_name
 order by total_revenue
 limit 5
+
+
+
+-- Which categories drive the most sales?
+select c.category_name, count(od.product_id) as sales_number
+from order_details od
+join products p on od.product_id = p.product_id
+join categories c on c.category_id = p.category_id
+group by c.category_name
+order by sales_number desc
