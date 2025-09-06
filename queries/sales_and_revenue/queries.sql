@@ -63,3 +63,14 @@ join products p on od.product_id = p.product_id
 join categories c on c.category_id = p.category_id
 group by c.category_name
 order by sales_number desc
+
+
+
+-- What is the average order value (AOV) by region?
+select
+    round(
+        (sum((od.unit_price::numeric * (1 - discount)::numeric * quantity::numeric))
+        / count(distinct o.order_id)) / count(distinct o.ship_region),
+    2) as avg_order_value_per_region
+from orders o
+join order_details od on o.order_id = od.order_id
